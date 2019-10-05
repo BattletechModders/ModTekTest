@@ -1,0 +1,10 @@
+{
+	"TargetID": "CombatGameConstants",
+	"Instructions": [
+		{
+			"JSONPath": "HitTables.HitMechLocationFromFront[?(@.k == 'CenterTorso')].v",
+			"Action": "Replace",
+			"Value": 9
+		}
+	]
+}
