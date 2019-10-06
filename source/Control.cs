@@ -90,6 +90,7 @@ namespace ModTekTest
             DataLoadedVerifications.ModifiedCombatGameConstantsViaAdvangedMerge();
             DataLoadedVerifications.ModifiedCombatGameConstantsViaNormaldMerge();
             DataLoadedVerifications.ModifiedDebugSettings();
+            DataLoadedVerifications.ModifiedGeneralGameTips();
         }
      }
 }
