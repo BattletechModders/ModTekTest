@@ -35,8 +35,10 @@ namespace ModTekTest
             }
             catch (Exception e)
             {
-                Logger.LogError("Init: Can't create log file", e);
+                Logger.LogError($"{InitVerifications.LogPrefix}Can't create log file", e);
             }
+
+            Logger.Log("Start the game and enter the skirmish mechaby. You should see Init, FinishLoading and DataLoaded steps in the log.");
 
             InitVerifications.CorrectModDirectory(directory);
             InitVerifications.EmbeddedSettingsJSON(settingsJSON);
@@ -46,21 +48,22 @@ namespace ModTekTest
                 var harmony = HarmonyInstance.Create(ModName);
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Logger.Log("Init: Patched via harmony.");
+                Logger.Log($"{InitVerifications.LogPrefix}Patched via harmony.");
             }
             catch (Exception e)
             {
-                Logger.LogError("Init: Couldn't patch via harmony", e);
+                Logger.LogError($"{InitVerifications.LogPrefix}Couldn't patch via harmony", e);
             }
-
-            Logger.Log("Init: Done.");
+            
+            Logger.Log($"{InitVerifications.LogPrefix}Done.");
         }
 
         // FinishedLoading indicates that the base game manifest and the custom manifest are ready for consumption
-        public static void FinishLoadingCustomEntry(Dictionary<string, Dictionary<string, VersionManifestEntry>> customResources)
+        public static void FinishedLoading(Dictionary<string, Dictionary<string, VersionManifestEntry>> customResources)
         {
             FinishLoadingVerifications.AddedCustomEntry(customResources);
             FinishLoadingVerifications.AddedManifestEntry();
+            Logger.Log($"{FinishLoadingVerifications.LogPrefix}Done.");
         }
     }
 
@@ -91,6 +94,7 @@ namespace ModTekTest
             DataLoadedVerifications.ModifiedCombatGameConstantsViaNormaldMerge();
             DataLoadedVerifications.ModifiedDebugSettings();
             DataLoadedVerifications.ModifiedGeneralGameTips();
+            Control.Logger.Log($"{DataLoadedVerifications.LogPrefix}Done.");
         }
      }
 }

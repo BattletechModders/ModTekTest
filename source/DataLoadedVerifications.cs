@@ -6,13 +6,28 @@ namespace ModTekTest
 {
     internal static class DataLoadedVerifications
     {
-        private static string LogPrefix = "SkirmishMechBay.DataLoaded: ";
+        internal static string LogPrefix = "DataLoaded: ";
 
         internal static void AddedHeatSink(DataManager dm)
         {
             var id = FinishLoadingVerifications.MTTHeatSinkID;
             try
             {
+                if (dm.ResourceEntryExists(BattleTechResourceType.HeatSinkDef, id))
+                {
+                    Control.Logger.Log($"{LogPrefix}Found {id} in manifest.");
+                }
+                else
+                {
+                    Control.Logger.LogError($"{LogPrefix}Can't find {id} in manifest.");
+                }
+
+                { // LanceConfiguratorDataLoaded does not load ALL heatsinkdefs
+                    var request = dm.CreateLoadRequest();
+                    request.AddLoadRequest<HeatSinkDef>(BattleTechResourceType.HeatSinkDef, id, null);
+                    request.ProcessRequests();
+                }
+
                 var component = dm.HeatSinkDefs.Get(id);
                 if (component.Description.Details == "ModTekTest Component")
                 {

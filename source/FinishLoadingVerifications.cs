@@ -8,6 +8,8 @@ namespace ModTekTest
 {
     internal class FinishLoadingVerifications
     {
+        internal static string LogPrefix = "FinishedLoading: ";
+
         internal const string MTTHeatSinkID = "mtt_heatsink";
         internal static void AddedCustomEntry(Dictionary<string, Dictionary<string, VersionManifestEntry>> customResources)
         {
@@ -20,16 +22,16 @@ namespace ModTekTest
                 JSONSerializationUtility.FromJSON(customs, json);
                 if (customs.Entries[0].id == "first entry")
                 {
-                    Control.Logger.Log("FinishedLoading: customResources works.");
+                    Control.Logger.Log($"{LogPrefix}customResources works.");
                 }
                 else
                 {
-                    Control.Logger.LogError("FinishedLoading: Could not find 'first entry' in custom resource.");
+                    Control.Logger.LogError($"{LogPrefix}Could not find 'first entry' in custom resource.");
                 }
             }
             catch (Exception e)
             {
-                Control.Logger.LogError("FinishedLoading: Couldn't read custom resource", e);
+                Control.Logger.LogError($"{LogPrefix}Couldn't read custom resource", e);
             }
         }
 
@@ -38,22 +40,21 @@ namespace ModTekTest
             try
             {
                 var dm = UnityGameInstance.BattleTechGame.DataManager;
+                var id = MTTHeatSinkID;
 
-                if (dm.ResourceEntryExists(BattleTechResourceType.HeatSinkDef, MTTHeatSinkID))
+                if (dm.ResourceEntryExists(BattleTechResourceType.HeatSinkDef, id))
                 {
-                    Control.Logger.Log($"FinishedLoading: Found {MTTHeatSinkID} in manifest.");
+                    Control.Logger.Log($"{LogPrefix}Found {id} in manifest.");
                 }
                 else
                 {
-                    Control.Logger.LogError($"FinishedLoading: Can't find {MTTHeatSinkID} in manifest.");
+                    Control.Logger.LogError($"{LogPrefix}Can't find {id} in manifest.");
                 }
             }
             catch (Exception e)
             {
-                Control.Logger.LogError("FinishedLoading: Could not test manifest data", e);
+                Control.Logger.LogError($"{LogPrefix}Could not test manifest data", e);
             }
-
-            Control.Logger.Log("FinishedLoading: Done.");
         }
     }
 }
