@@ -30,5 +30,10 @@
 			"Path": "MTTHeatSinks",
 			"ShouldMergeJSON": false
 		},
+		{
+			"Type": "GameTip",
+			"Path": "MTTGameTips",
+			"ShouldAppendText": false
+		}
     ]
 }

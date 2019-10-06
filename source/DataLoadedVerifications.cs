@@ -110,5 +110,25 @@ namespace ModTekTest
                 Control.Logger.LogError($"{LogPrefix}Could not validate CombatGameConstants modification", e);
             }
         }
+
+        internal static void ModifiedGeneralGameTips()
+        {
+            try
+            {
+                var list = new GameTipList("general.txt", 0);
+                if (list.PickTip() == "ModTekTest Gametip")
+                {
+                    Control.Logger.Log($"{LogPrefix}GameTipList.General was modified as expected.");
+                }
+                else
+                {
+                    Control.Logger.LogError($"{LogPrefix}GameTipList.General was not modified.");
+                }
+            }
+            catch (Exception e)
+            {
+                Control.Logger.LogError($"{LogPrefix}Could not validate GameTips", e);
+            }
+        }
     }
 }
