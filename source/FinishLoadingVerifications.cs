@@ -1,4 +1,5 @@
 ﻿using BattleTech;
+using HBS;
 using HBS.Util;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,11 @@ namespace ModTekTest
         {
             try
             {
+                if (!LazySingletonBehavior<UnityGameInstance>.HasInstance)
+                {
+                    Control.Logger.LogError($"{LogPrefix}Could not test for {nameof(AddedManifestEntry)} as game not yet init (UnitGameInstance==null).");
+                    return;
+                }
                 var dm = UnityGameInstance.BattleTechGame.DataManager;
                 var id = MTTHeatSinkID;
 
@@ -48,7 +54,7 @@ namespace ModTekTest
                 }
                 else
                 {
-                    Control.Logger.LogError($"{LogPrefix}Can't find {id} in manifest.");
+                    Control.Logger.LogError($"{LogPrefix}Can't find {id} in manifest, make sure the data manager is up-to-date when calling a mods finishedloading.");
                 }
             }
             catch (Exception e)

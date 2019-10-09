@@ -15,17 +15,29 @@ namespace ModTekTest
             {
                 if (dm.ResourceEntryExists(BattleTechResourceType.HeatSinkDef, id))
                 {
-                    Control.Logger.Log($"{LogPrefix}Found {id} in manifest.");
+                    Control.Logger.Log($"{LogPrefix}Found {id} via dm.ResourceEntryExists.");
                 }
                 else
                 {
-                    Control.Logger.LogError($"{LogPrefix}Can't find {id} in manifest.");
+                    Control.Logger.LogError($"{LogPrefix}Can't find {id} via dm.ResourceEntryExists.");
                 }
 
                 { // LanceConfiguratorDataLoaded does not load ALL heatsinkdefs
                     var request = dm.CreateLoadRequest();
-                    request.AddLoadRequest<HeatSinkDef>(BattleTechResourceType.HeatSinkDef, id, null);
+                    request.AddAllOfTypeBlindLoadRequest(BattleTechResourceType.HeatSinkDef);
+                    //request.AddLoadRequest<HeatSinkDef>(BattleTechResourceType.HeatSinkDef, id, null);
                     request.ProcessRequests();
+
+                    Control.Logger.Log($"{LogPrefix}ProcessRequests AddAllOfTypeBlindLoadRequest HeatSinkDef.");
+                }
+
+                if (dm.Exists(BattleTechResourceType.HeatSinkDef, id))
+                {
+                    Control.Logger.Log($"{LogPrefix}Found {id} via dm.Exists.");
+                }
+                else
+                {
+                    Control.Logger.LogError($"{LogPrefix}Can't find {id} via dm.Exists.");
                 }
 
                 var component = dm.HeatSinkDefs.Get(id);
@@ -50,7 +62,8 @@ namespace ModTekTest
             try
             {
                 var component = dm.HeatSinkDefs.Get("Gear_HeatSink_Generic_Standard");
-                if (component.Description.Details == "mtt test")
+                var expected = "mtt test";
+                if (component.Description.Details == expected)
                 {
                     Control.Logger.Log($"{LogPrefix}{id} has new details.");
                 }
@@ -71,13 +84,14 @@ namespace ModTekTest
             {
                 var constants = CombatGameConstants.GetInstance(UnityGameInstance.BattleTechGame);
                 var hit = constants.HitTables.HitMechLocationFromFront[ArmorLocation.CenterTorso];
-                if (hit == 9)
+                var expected = 9;
+                if (hit == expected)
                 {
-                    Control.Logger.Log($"{LogPrefix}CombatGameConstants HitMechLocationFromFront[CenterTorso] was expected 9.");
+                    Control.Logger.Log($"{LogPrefix}CombatGameConstants HitMechLocationFromFront[CenterTorso] was expected {expected}.");
                 }
                 else
                 {
-                    Control.Logger.LogError($"{LogPrefix}CombatGameConstants HitMechLocationFromFront[CenterTorso] was not expected 9, it was {hit}.");
+                    Control.Logger.LogError($"{LogPrefix}CombatGameConstants HitMechLocationFromFront[CenterTorso] was not expected {expected}, it was {hit}.");
                 }
             }
             catch (Exception e)
@@ -92,13 +106,14 @@ namespace ModTekTest
             {
                 var constants = CombatGameConstants.GetInstance(UnityGameInstance.BattleTechGame);
                 var hit = constants.Heat.InternalHeatSinkCount;
-                if (hit == 24)
+                var expected = 42;
+                if (hit == expected)
                 {
-                    Control.Logger.Log($"{LogPrefix}CombatGameConstants.Heat.InternalHeatSinkCount was expected 42.");
+                    Control.Logger.Log($"{LogPrefix}CombatGameConstants.Heat.InternalHeatSinkCount was expected {expected}.");
                 }
                 else
                 {
-                    Control.Logger.LogError($"{LogPrefix}CombatGameConstants.Heat.InternalHeatSinkCount was not expected 42 it was {hit}.");
+                    Control.Logger.LogError($"{LogPrefix}CombatGameConstants.Heat.InternalHeatSinkCount was not expected {expected} it was {hit}.");
                 }
             }
             catch (Exception e)
@@ -111,13 +126,14 @@ namespace ModTekTest
         {
             try
             {
-                if (DebugBridge.UseExperimentalPinkMechFix == false)
+                var expected = false;
+                if (DebugBridge.UseExperimentalPinkMechFix == expected)
                 {
-                    Control.Logger.Log($"{LogPrefix}DebugBridge.UseExperimentalPinkMechFix was expected false.");
+                    Control.Logger.Log($"{LogPrefix}DebugBridge.UseExperimentalPinkMechFix was expected {expected}.");
                 }
                 else
                 {
-                    Control.Logger.LogError($"{LogPrefix}DebugBridge.UseExperimentalPinkMechFix was not expected false.");
+                    Control.Logger.LogError($"{LogPrefix}DebugBridge.UseExperimentalPinkMechFix was not expected {expected}.");
                 }
             }
             catch (Exception e)
@@ -131,9 +147,10 @@ namespace ModTekTest
             try
             {
                 var list = new GameTipList("general.txt", 0);
-                if (list.PickTip() == "ModTekTest Gametip")
+                var expected = "ModTekTest Gametip";
+                if (list.PickTip() == expected)
                 {
-                    Control.Logger.Log($"{LogPrefix}GameTipList.General was modified as expected.");
+                    Control.Logger.Log($"{LogPrefix}GameTipList.General was modified as expected to {expected}.");
                 }
                 else
                 {

@@ -61,9 +61,16 @@ namespace ModTekTest
         // FinishedLoading indicates that the base game manifest and the custom manifest are ready for consumption
         public static void FinishedLoading(Dictionary<string, Dictionary<string, VersionManifestEntry>> customResources)
         {
-            FinishLoadingVerifications.AddedCustomEntry(customResources);
-            FinishLoadingVerifications.AddedManifestEntry();
-            Logger.Log($"{FinishLoadingVerifications.LogPrefix}Done.");
+            try
+            {
+                FinishLoadingVerifications.AddedCustomEntry(customResources);
+                FinishLoadingVerifications.AddedManifestEntry();
+                Logger.Log($"{FinishLoadingVerifications.LogPrefix}Done.");
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(FinishLoadingVerifications.LogPrefix, e);
+            }
         }
     }
 
@@ -87,14 +94,21 @@ namespace ModTekTest
     {
         internal static void Postfix(SkirmishMechBayPanel __instance)
         {
-            var dm = __instance.dataManager;
-            DataLoadedVerifications.AddedHeatSink(dm);
-            DataLoadedVerifications.ModifiedHeatSink(dm);
-            DataLoadedVerifications.ModifiedCombatGameConstantsViaAdvangedMerge();
-            DataLoadedVerifications.ModifiedCombatGameConstantsViaNormaldMerge();
-            DataLoadedVerifications.ModifiedDebugSettings();
-            DataLoadedVerifications.ModifiedGeneralGameTips();
-            Control.Logger.Log($"{DataLoadedVerifications.LogPrefix}Done.");
+            try
+            {
+                var dm = __instance.dataManager;
+                DataLoadedVerifications.AddedHeatSink(dm);
+                DataLoadedVerifications.ModifiedHeatSink(dm);
+                DataLoadedVerifications.ModifiedCombatGameConstantsViaAdvangedMerge();
+                DataLoadedVerifications.ModifiedCombatGameConstantsViaNormaldMerge();
+                DataLoadedVerifications.ModifiedDebugSettings();
+                DataLoadedVerifications.ModifiedGeneralGameTips();
+                Control.Logger.Log($"{DataLoadedVerifications.LogPrefix}Done.");
+            }
+            catch (Exception e)
+            {
+                Control.Logger.LogError(DataLoadedVerifications.LogPrefix, e);
+            }
         }
-     }
+    }
 }
